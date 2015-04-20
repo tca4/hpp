@@ -4,26 +4,20 @@ import fr.tse.fi2.hpp.labs.beans.DebsRecord;
 import fr.tse.fi2.hpp.labs.beans.measure.QueryProcessorMeasure;
 import fr.tse.fi2.hpp.labs.queries.AbstractQueryProcessor;
 
-/**
- * Example query that outputs the number of processed events
- * 
- * @author Julien
- * 
- */
-public class SimpleQuerySumEvent extends AbstractQueryProcessor {
+public class SumQuery extends AbstractQueryProcessor {
 
-	// Total of events
-	int sum;
-
-	public SimpleQuerySumEvent(QueryProcessorMeasure measure) {
+	private float sum = 0;
+	
+	public SumQuery(QueryProcessorMeasure measure) {
 		super(measure);
-		sum = 0;
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void process(DebsRecord record) {
-		//writeLine("" + sum++);
-		
+		sum += record.getFare_amount();
+		writeLine("Somme " + sum);
+
 	}
 
 }
