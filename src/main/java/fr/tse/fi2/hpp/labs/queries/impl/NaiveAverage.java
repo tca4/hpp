@@ -25,7 +25,7 @@ public class NaiveAverage extends AbstractQueryProcessor {
 			sum += f;
 		}
 		writeLine("current mean : " + (sum / numbers.size()));
-		System.out.println(sum/ numbers.size());
+		
 	}
 
 }
