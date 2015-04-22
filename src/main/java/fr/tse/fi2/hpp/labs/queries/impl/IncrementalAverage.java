@@ -8,16 +8,21 @@ public class IncrementalAverage extends AbstractQueryProcessor {
 
 	private int nb = 0;
 	private float sum = 0;
+	private IncrementalAverage writeProcess;
 
 	public IncrementalAverage(QueryProcessorMeasure measure) {
 		super(measure);
+		
+		
 	}
 
 	@Override
-	protected void process(DebsRecord record) {
+	protected double process(DebsRecord record) {
 		nb++;
 		sum += record.getFare_amount();
-		writeLine("current mean : " + (sum / nb));
+		
+		return(sum/nb);
+		//writeLine("current mean : " + (sum / nb));
 	}
 
 }

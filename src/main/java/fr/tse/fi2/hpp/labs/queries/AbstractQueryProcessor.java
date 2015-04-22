@@ -69,6 +69,9 @@ public abstract class AbstractQueryProcessor implements Runnable {
 		this.measure = measure;
 		// Initialize queue
 		this.eventqueue = new LinkedBlockingQueue<>();
+		
+		// create thread
+		//AbstractQueryProcessor writequery = new AbstractQueryProcessor();
 
 		// Initialize writer
 		try {
@@ -95,7 +98,8 @@ public abstract class AbstractQueryProcessor implements Runnable {
 				if (record.isPoisonPill()) {
 					break;
 				} else {
-					process(record);
+					Double result = process(record);
+					writeLine(result.toString());
 				}
 			} catch (InterruptedException e) {
 				logger.error(
@@ -114,7 +118,7 @@ public abstract class AbstractQueryProcessor implements Runnable {
 	 * @param record
 	 *            record to be processed
 	 */
-	protected abstract void process(DebsRecord record);
+	protected abstract double process(DebsRecord record);
 
 	/**
 	 * 
