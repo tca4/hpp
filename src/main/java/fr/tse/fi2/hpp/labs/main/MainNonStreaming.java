@@ -36,6 +36,7 @@ public class MainNonStreaming {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		//System.in.read();
 		// Init query time measure
 		QueryProcessorMeasure measure = new QueryProcessorMeasure();
 		// Init dispatcher and load everything
@@ -75,7 +76,6 @@ public class MainNonStreaming {
 		// Output measure and ratio per query processor
 		measure.setProcessedRecords(dispatch.getRecords());
 		measure.outputMeasure();
-
 	}
 
 }
