@@ -100,7 +100,6 @@ public abstract class AbstractQueryProcessor implements Runnable {
 					break;
 				} else {
 					Double result = process(record);
-
 					writeLine(result.toString());
 				}
 			} catch (InterruptedException e) {

@@ -14,9 +14,10 @@ public class SumQuery extends AbstractQueryProcessor {
 	}
 
 	@Override
-	protected void process(DebsRecord record) {
+	protected double process(DebsRecord record) {
 		sum += record.getFare_amount();
 		writeLine("Somme " + sum);
+		return (double)sum;
 
 	}
 
