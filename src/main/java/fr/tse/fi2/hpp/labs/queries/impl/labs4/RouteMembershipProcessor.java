@@ -35,10 +35,6 @@ public class RouteMembershipProcessor extends AbstractQueryProcessor {
 		return 0;
 	}
 	
-
-	
-	
-	
 	public boolean isIn(DebsRecord recordToCheck)
 	{
 		for(DebsRecord rec : allRecords)
