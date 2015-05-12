@@ -1,5 +1,7 @@
 package fr.tse.fi2.hpp.labs.beans;
 
+import java.util.Random;
+
 /**
  * Immutable Bean that maps (with almost no processing) a CSV record. The only
  * processing is the pickup/dropoff dates being transformed into unix timestamps.
@@ -293,6 +295,25 @@ public class DebsRecord {
 					+ ", tip_amount=" + tip_amount + ", tolls_amount="
 					+ tolls_amount + ", poisonPill=" + poisonPill + "]";
 		}
+	}
+	
+	/**
+	 * Create a random DebsRecord. We are sure that the record is not in the database because its hack_license is "A"
+	 * @return
+	 */
+	public static DebsRecord randomRecord()
+	{
+	
+		Random rand = new Random();
+		DebsRecord tmp = new DebsRecord("A", "A", (long) rand.nextInt(100000 + 1), (long) rand.nextInt(100000 + 1), 
+									(long) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1),
+									(float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1),
+									"A", (float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1),
+									(float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1), (float) rand.nextInt(100000 + 1), false);
+		
+		return tmp;
+		
+		
 	}
 
 }
