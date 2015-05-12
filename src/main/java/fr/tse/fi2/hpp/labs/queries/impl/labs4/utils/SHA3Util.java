@@ -1,4 +1,4 @@
-package fr.tse.fi2.hpp.labs.queries.impl.labs4;
+package fr.tse.fi2.hpp.labs.queries.impl.labs4.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -19,7 +19,7 @@ public class SHA3Util {
 
 		 DigestSHA3 md = new DigestSHA3(size);
 	     String text = (string + salt);
-	     System.out.println(text);
+//	     System.out.println(text);
 	     
 	     try 
 	     {
@@ -35,6 +35,12 @@ public class SHA3Util {
 	     return encode(digest, modulo);
 	}
 
+	/**
+	 * Convertit le tableau de bytes en un entier modulo le parametre modulo
+	 * @param bytes
+	 * @param modulo
+	 * @return un entier entre 0 et modulo-1
+	 */
 	public static int encode(byte[] bytes, int modulo) 
 	{
 		BigInteger bigInt = new BigInteger(1, bytes);
