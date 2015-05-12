@@ -4,6 +4,9 @@ package fr.tse.fi2.hpp.labs.queries.impl.labs4.utils;
 import java.util.Arrays;
 import java.util.BitSet;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 import fr.tse.fi2.hpp.labs.beans.DebsRecord;
 
 public class BloomFilter {
@@ -36,22 +39,23 @@ public class BloomFilter {
 	
 	/**
 	 * Ajoute un DebsRecord dans le filtre de Bloom. Hash le record avec l'ensemble des sels différents Pour
-	 * chaque résultat p, met la case p à 1.
+	 * chaque résultat p, met la case p à true.
 	 * @param rec
 	 */
 	public void add(DebsRecord rec)
 	{
 		for(String salt : this.salts)
 		{
+			HashFunction hf = Hashing.murmur3_32(0);
 			int position = SHA3Util.digest(rec.toString(), salt, 512, sizeFilter);
-			System.out.println(position);
+//			System.out.println(position);
 			this.filter.set(position, true);;
 		}
 	}
 	
 	/**
 	 * Verifie si rec appartient au bloom filter. Hash rec avec les sels differents. Pour chaque hash, verifie 
-	 * que la case correspondante est à 1. Renvoie false sinon
+	 * que la case correspondante est à true. Renvoie false sinon
 	 * @param rec
 	 * @return
 	 */
@@ -60,7 +64,7 @@ public class BloomFilter {
 		for(String salt : this.salts)
 		{
 			int position = SHA3Util.digest(rec.toString(), salt, 512, sizeFilter);
-			if (!this.filter.get(position)) // si le bit à position n'est pas à true
+			if (!this.filter.get(position)) // si le bit à l'index position n'est pas à true
 				{
 					return false;
 				}
@@ -88,11 +92,12 @@ public class BloomFilter {
 				(long)120, (float)0.44, (float)-73.956528, (float)40.716976, (float)-73.962440, (float)40.715008,"CSH", (float)3.50, (float)0.50, (float)0.50, (float)0.00 , (float)0.00, (float)4.50, false);
 
 		tmp.add(test);
+		tmp.add(test2);
 		
 		System.out.println(tmp.filter.toString());
 		
 		
-		System.out.println("\n" + tmp.contain(test));
+		System.out.println(tmp.contain(test));
 		System.out.println(tmp.contain(test2));
 	
 	}

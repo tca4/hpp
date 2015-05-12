@@ -87,25 +87,10 @@ public class BenchmarkQueryMembership {
 	@Benchmark
 	public int doBenchmark()
 	{
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date_pickup = null;
-		Date  date_dropoff = null;
-		try {
-			date_pickup = (Date)dateFormat.parse("2013-01-01 00:00:00");
-			date_dropoff = (Date)dateFormat.parse("2013-01-01 00:02:00");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DebsRecord test_is_not_in  = DebsRecord.randomRecord();
 		
+		System.out.println(q.isIn(test_is_not_in));
 		
-		DebsRecord test = new DebsRecord("07290D3599E7A0D62097A346EFCC1FB5",
-										"E7750A37CAB07D0DFF0AF7E3573AC141",
-										date_pickup.getTime(),
-										date_dropoff.getTime(),
-										(long)120, (float)0.44, (float)-73.956528, (float)40.716976, (float)-73.962440, (float)40.715008,"CSH", (float)3.50, (float)0.50, (float)0.50, (float)0.00 , (float)0.00, (float)4.50, false);
-		
-		System.out.println(q.isIn(test));
 		return 0;
 		
 	}
