@@ -1,16 +1,15 @@
 package fr.tse.fi2.hpp.labs.queries.impl.labs4.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.Arrays;
-import java.util.Date;
+import java.util.BitSet;
 
 import fr.tse.fi2.hpp.labs.beans.DebsRecord;
 
 public class BloomFilter {
 
 	private String[] salts;
-	private byte[] filter;
+	private BitSet filter;
 	private int sizeFilter;
 	private int nbHashFunctions;
 	
@@ -26,8 +25,8 @@ public class BloomFilter {
 		}
 		
 		// initialise le filtre avec la taille sizeFilter et le remplit de 0
-		this.filter = new byte[sizeFilter];
-		Arrays.fill(this.filter, (byte) 0);
+		this.filter = new BitSet(sizeFilter);
+		this.filter.clear();
 		
 		// indique la taille du filtre, et le nombre de fonctions de hachage
 		this.sizeFilter = sizeFilter;
@@ -46,12 +45,12 @@ public class BloomFilter {
 		{
 			int position = SHA3Util.digest(rec.toString(), salt, 512, sizeFilter);
 			System.out.println(position);
-			this.filter[position] = 1;
+			this.filter.set(position, true);;
 		}
 	}
 	
 	/**
-	 * Verifie si rec appartient au bloom filter. Hash rec avec les sels differents. Pour chaqu hash, verifie 
+	 * Verifie si rec appartient au bloom filter. Hash rec avec les sels differents. Pour chaque hash, verifie 
 	 * que la case correspondante est à 1. Renvoie false sinon
 	 * @param rec
 	 * @return
@@ -61,9 +60,9 @@ public class BloomFilter {
 		for(String salt : this.salts)
 		{
 			int position = SHA3Util.digest(rec.toString(), salt, 512, sizeFilter);
-			if (this.filter[position] != 1)
+			if (!this.filter.get(position)) // si le bit à position n'est pas à true
 				{
-				return false;
+					return false;
 				}
 		}
 		
@@ -90,10 +89,7 @@ public class BloomFilter {
 
 		tmp.add(test);
 		
-		for(byte b : tmp.filter)
-		{
-			System.out.print(b);
-		}
+		System.out.println(tmp.filter.toString());
 		
 		
 		System.out.println("\n" + tmp.contain(test));
