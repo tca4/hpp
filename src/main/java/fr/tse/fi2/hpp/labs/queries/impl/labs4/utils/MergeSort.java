@@ -1,5 +1,7 @@
 package fr.tse.fi2.hpp.labs.queries.impl.labs4.utils;
 
+import java.util.Random;
+
 public class MergeSort {
 
 	public static int[] doMergeSort(int[] arr)
@@ -74,15 +76,55 @@ public class MergeSort {
 	{
 		for(int i = 0; i < arr.length; i++)
 		{
-			System.out.print(arr[i]);
+			System.out.print(arr[i] + " ");
 		}
+		
+		System.out.println();
+	}
+	
+	/**
+	 * Genere un tableau de int de taille size dont les valeurs sont entre 0 et 100 000
+	 * @param size
+	 * @return
+	 */
+	public static int[] generateRandomArray(int size)
+	{
+		int[] result = new int[size];
+		Random rdm = new Random();
+		
+		for(int k = 0; k < size; k++)
+		{
+			 result[k] = rdm.nextInt(100000);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Indique si un tableau est trié.
+	 * @param arr
+	 * @return
+	 */
+	public static boolean isSorted(int[] arr)
+	{
+		for(int k = 0; k < arr.length - 1; k++)
+		{
+			if (arr[k] > arr[k+1])
+				return false;
+		}
+		
+		return true;
 	}
 	
 	public static void main(String[] args) 
 	{
-		int[] a1 = {1, 11, 3, 7, 8, 2, 4, 3, 3, 5, 2};
+		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 5, 2};
+		int[] a2 = generateRandomArray(900);
 
-		printArray(doMergeSort(a1));
+		printArray(a2);
+		printArray(doMergeSort(a2));
+		System.out.println(isSorted(doMergeSort(a2)));
+	
 		
 
 	}
