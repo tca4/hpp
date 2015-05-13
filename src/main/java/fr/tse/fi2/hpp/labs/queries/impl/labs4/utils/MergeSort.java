@@ -4,6 +4,11 @@ import java.util.Random;
 
 public class MergeSort {
 
+	/**
+	 * Trie un tableau en utilsant l'algorithme du merge sort.
+	 * @param arr
+	 * @return
+	 */
 	public static int[] doMergeSort(int[] arr)
 	{
 		int len = arr.length;
@@ -34,8 +39,9 @@ public class MergeSort {
 		
 		
 	}
+	
 	/**
-	 * Fusionne le tableau arr1 avec le tableau arr2
+	 * Fusionne le tableau arr1 avec le tableau arr2, en triant les éléments
 	 * @param arr1
 	 * @param arr2
 	 * @return
@@ -75,6 +81,41 @@ public class MergeSort {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Trie le tableau arr avec l'algorithme du merge sort, mais trie les sous-tableaux
+	 * avec l'algorithme du tri par insertion si la taille de ceux ci est <= CUTOFF
+	 * @param arr
+	 * @return
+	 */
+	public static int[] doMergeSortUpgraded(int[] arr, int CUTOFF)
+	{
+		int len = arr.length;
+		
+		if (len <= CUTOFF)
+		{
+			return InsertionSort.doInsertionSort(arr);
+		}
+		
+		else
+		{
+			int[] leftArr = new int[len/2];
+			int[] rightArr = new int[len - len/2];
+			
+			for(int k = 0; k < len/2; k++)
+			{
+				leftArr[k] = arr[k];
+			}
+			
+			for(int k = 0; k < len - len/2; k++)
+			{
+				rightArr[k] = arr[len/2 + k];
+			}
+			
+			return mergeArrays(doMergeSortUpgraded(leftArr, CUTOFF), doMergeSortUpgraded(rightArr, CUTOFF));
+			
+		}
 	}
 	
 	/**
@@ -128,10 +169,10 @@ public class MergeSort {
 	public static void main(String[] args) 
 	{
 		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 5, 2};
-		int[] a2 = generateRandomArray(900);
+		int[] a2 = generateRandomArray(100);
 
 		printArray(a2);
-		printArray(doMergeSort(a2));
+		printArray(doMergeSortUpgraded(a2, 16));
 		System.out.println(isSorted(doMergeSort(a2)));
 	
 		
