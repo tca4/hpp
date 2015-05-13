@@ -4,6 +4,7 @@ package fr.tse.fi2.hpp.labs.queries.impl.labs4.utils;
 import java.util.Arrays;
 import java.util.BitSet;
 
+import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
@@ -47,9 +48,8 @@ public class BloomFilter {
 		for(String salt : this.salts)
 		{
 			HashFunction hf = Hashing.murmur3_32(0);
-			int position = SHA3Util.digest(rec.toString(), salt, 512, sizeFilter);
-//			System.out.println(position);
-			this.filter.set(position, true);;
+			HashCode hc = hf.newHasher().putString(rec.toString() + salt).hash();
+			this.filter.set(hc.asInt(), true);;
 		}
 	}
 	
