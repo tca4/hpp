@@ -34,7 +34,12 @@ public class MergeSort {
 		
 		
 	}
-	
+	/**
+	 * Fusionne le tableau arr1 avec le tableau arr2
+	 * @param arr1
+	 * @param arr2
+	 * @return
+	 */
 	public static int[] mergeArrays(int [] arr1, int[] arr2)
 	{
 		int total = arr1.length + arr2.length;
@@ -72,6 +77,10 @@ public class MergeSort {
 		return result;
 	}
 	
+	/**
+	 * Affiche un tableau d'entiers, avec un espace entre chaque entier
+	 * @param arr
+	 */
 	public static void printArray(int[] arr)
 	{
 		for(int i = 0; i < arr.length; i++)

@@ -26,7 +26,7 @@ public class TestMergeSort {
 			int[] testArray = MergeSort.generateRandomArray(SIZES[k % 3]);
 			assertTrue(MergeSort.isSorted(MergeSort.doMergeSort(testArray)));
 			System.out.println("Test " + (k+1) + "/" + NB_TESTS + " -> Done");
-			//delete testArray;
+			testArray=null;
 		}
 		
 	}
