@@ -1,4 +1,4 @@
-package fr.tse.fi2.hpp.labs.queries.impl.benchmarks;
+package fr.tse.fi2.hpp.benchmarks;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

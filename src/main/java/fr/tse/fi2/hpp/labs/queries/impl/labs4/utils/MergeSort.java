@@ -89,7 +89,7 @@ public class MergeSort {
 	 * @param arr
 	 * @return
 	 */
-	public static int[] doMergeSortUpgraded(int[] arr, int CUTOFF)
+	public static int[] doMergeSortUpgraded(int[] arr, final int CUTOFF)
 	{
 		int len = arr.length;
 		
