@@ -23,15 +23,8 @@ public class MergeSort {
 			int[] leftArr = new int[len/2];
 			int[] rightArr = new int[len - len/2];
 			
-			for(int k = 0; k < len/2; k++)
-			{
-				leftArr[k] = arr[k];
-			}
-			
-			for(int k = 0; k < len - len/2; k++)
-			{
-				rightArr[k] = arr[len/2 + k];
-			}
+			System.arraycopy(arr, 0, leftArr, 0, len/2);
+			System.arraycopy(arr, len/2, rightArr, 0, len - len/2);
 			
 			return mergeArrays(doMergeSort(leftArr), doMergeSort(rightArr));
 			
@@ -103,15 +96,8 @@ public class MergeSort {
 			int[] leftArr = new int[len/2];
 			int[] rightArr = new int[len - len/2];
 			
-			for(int k = 0; k < len/2; k++)
-			{
-				leftArr[k] = arr[k];
-			}
-			
-			for(int k = 0; k < len - len/2; k++)
-			{
-				rightArr[k] = arr[len/2 + k];
-			}
+			System.arraycopy(arr, 0, leftArr, 0, len/2);
+			System.arraycopy(arr, len/2, rightArr, 0, len - len/2);
 			
 			return mergeArrays(doMergeSortUpgraded(leftArr, CUTOFF), doMergeSortUpgraded(rightArr, CUTOFF));
 			
@@ -175,8 +161,6 @@ public class MergeSort {
 		printArray(doMergeSortUpgraded(a2, 16));
 		System.out.println(isSorted(doMergeSort(a2)));
 	
-		
-
 	}
 
 }

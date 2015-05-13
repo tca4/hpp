@@ -13,6 +13,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Warmup;
 
 import fr.tse.fi2.hpp.labs.queries.impl.labs4.utils.MergeSort;
+import fr.tse.fi2.hpp.labs.queries.impl.labs4.utils.MergeSortMultiThread;
 
 @State(Scope.Thread)
 @Warmup(iterations = 3)
@@ -26,9 +27,9 @@ public class BenchmarkMergeSort
 	public void doBenchmark()
 	{
 		
-		int[] testArray = MergeSort.generateRandomArray(1000000);
-		//MergeSort.isSorted(MergeSort.doMergeSort(testArray));
-		MergeSort.doMergeSortUpgraded(testArray, 16);
-	
+		int[] testArray = MergeSort.generateRandomArray(10000000);
+		//MergeSort.doMergeSortUpgraded(testArray, 32);
+		MergeSortMultiThread m = new MergeSortMultiThread(testArray);
+		m.compute();
 	}
 }
