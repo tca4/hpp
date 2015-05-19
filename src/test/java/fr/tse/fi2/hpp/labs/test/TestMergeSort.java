@@ -12,7 +12,7 @@ public class TestMergeSort {
 		
 		int[] testArray = { 1, 2, 3, 3, 1, 4, 1, 1};
 		
-		assertTrue(MergeSort.isSorted(MergeSort.doMergeSort(testArray)));
+		assertTrue(MergeSort.isSorted(MergeSort.doMergeSort(testArray, 0, testArray.length)));
 	}
 	
 	@Test
@@ -24,7 +24,7 @@ public class TestMergeSort {
 		for(int k = 0; k < NB_TESTS; k++)
 		{
 			int[] testArray = MergeSort.generateRandomArray(SIZES[k % 3]);
-			assertTrue(MergeSort.isSorted(MergeSort.doMergeSort(testArray)));
+			assertTrue(MergeSort.isSorted(MergeSort.doMergeSort(testArray, 0, testArray.length)));
 			System.out.println("Test " + (k+1) + "/" + NB_TESTS + " -> Done");
 			testArray=null;
 		}

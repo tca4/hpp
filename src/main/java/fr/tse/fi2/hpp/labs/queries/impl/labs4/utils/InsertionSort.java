@@ -7,7 +7,7 @@ public class InsertionSort {
 	 * @param arr
 	 * @return
 	 */
-	public static int[] doInsertionSort(int[] arr)
+	public static void doInsertionSort(int[] arr)
 	{
 		int len = arr.length;
 		
@@ -28,8 +28,6 @@ public class InsertionSort {
 			
 			arr[j] = cell_value;
 		}
-		
-		return arr;
 	}
 	
 	/**
@@ -53,7 +51,8 @@ public class InsertionSort {
 		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 5, 2};
 
 		printArray(a1);
-		printArray(doInsertionSort(a1));
+		doInsertionSort(a1);
+		printArray(a1);
 
 	}
 }

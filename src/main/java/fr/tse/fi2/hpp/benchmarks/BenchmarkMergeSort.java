@@ -29,7 +29,7 @@ public class BenchmarkMergeSort
 		
 		int[] testArray = MergeSort.generateRandomArray(10000000);
 		//MergeSort.doMergeSortUpgraded(testArray, 32);
-		MergeSortMultiThread m = new MergeSortMultiThread(testArray);
+		MergeSortMultiThread m = new MergeSortMultiThread(testArray, 0, testArray.length);
 		m.compute();
 	}
 }

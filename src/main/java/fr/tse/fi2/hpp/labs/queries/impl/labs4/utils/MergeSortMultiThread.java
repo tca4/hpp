@@ -9,21 +9,25 @@ public class MergeSortMultiThread extends RecursiveTask<int[]> {
 
 	private static final int CUTOFF = 20;
 	int[] arr;
+	int beginIndex, endIndex;
 	
-	public MergeSortMultiThread(int[] arr) {
+	public MergeSortMultiThread(int[] arr, int begin,  int end) {
 		super();
-		this.arr = new int[arr.length];
-		System.arraycopy(arr, 0, this.arr, 0, arr.length);
+		this.arr = arr;
+		this.beginIndex = begin;
+		this.endIndex = end;
+		
 	}
 
 	@Override
 	public int[] compute() 
 	{
-		int len = this.arr.length;
+		int len = endIndex - beginIndex;
 		
 		if (len < CUTOFF) 
 		{
-			return InsertionSort.doInsertionSort(this.arr);
+			InsertionSort.doInsertionSort(arr);
+			return arr;
 		} 
 		
 		else 
@@ -31,22 +35,21 @@ public class MergeSortMultiThread extends RecursiveTask<int[]> {
 			// Subtasks : divise le tableau en deux sous tableaux. Cree une sous tache pour
 			// chacun des sous tableaux
 			
-			int[] leftArr = new int[len/2];
-			int[] rightArr = new int[len - len/2];
+			int middleIndex = (beginIndex + endIndex) / 2;
 			
-			System.arraycopy(this.arr, 0, leftArr, 0, len/2);
-			System.arraycopy(this.arr, len/2, rightArr, 0, len - len/2);
-			
-			MergeSortMultiThread subtask1 = new MergeSortMultiThread(leftArr);
-			MergeSortMultiThread subtask2 = new MergeSortMultiThread(rightArr);
+			// fait le merge sort sur la partie gauche, puis la partie droite
+			MergeSortMultiThread subtask1 = new MergeSortMultiThread(arr, beginIndex, middleIndex);
+			MergeSortMultiThread subtask2 = new MergeSortMultiThread(arr, middleIndex,   endIndex);
 
-			
 			//Start : lance chaque sous tache
 			subtask1.fork();
 			subtask2.fork();
 			
-			//Join
-			return MergeSort.mergeArrays(subtask1.join(), subtask2.join());
+			//Join :  fusionne les deux parties
+			subtask1.join();
+			subtask2.join();
+			MergeSort.mergeArrays(arr, beginIndex, middleIndex, endIndex);
+			return arr;
 			
 		}
 
@@ -54,11 +57,10 @@ public class MergeSortMultiThread extends RecursiveTask<int[]> {
 	
 	public static void main(String[] args) 
 	{
-		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 5, 2};
-		MergeSortMultiThread m1 = new MergeSortMultiThread(a1);
+		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 27, 2};
+		MergeSortMultiThread m1 = new MergeSortMultiThread(a1, 0, a1.length);
 		
 		MergeSort.printArray(m1.compute());
-	
 	}
 
 }

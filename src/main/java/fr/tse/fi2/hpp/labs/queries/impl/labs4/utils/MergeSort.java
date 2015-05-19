@@ -5,13 +5,13 @@ import java.util.Random;
 public class MergeSort {
 
 	/**
-	 * Trie un tableau en utilsant l'algorithme du merge sort.
+	 * Trie un tableau en utilisant l'algorithme du merge sort.
 	 * @param arr
 	 * @return
 	 */
-	public static int[] doMergeSort(int[] arr)
+	public static int[] doMergeSort(int[] arr, int beginIndex, int endIndex)
 	{
-		int len = arr.length;
+		int len = endIndex - beginIndex;
 		
 		if (len <= 1)
 		{
@@ -20,13 +20,15 @@ public class MergeSort {
 		
 		else
 		{
-			int[] leftArr = new int[len/2];
-			int[] rightArr = new int[len - len/2];
+			int middleIndex = (beginIndex + endIndex) / 2;
 			
-			System.arraycopy(arr, 0, leftArr, 0, len/2);
-			System.arraycopy(arr, len/2, rightArr, 0, len - len/2);
+			// fait le merge sort sur la partie gauche, puis la partie droite
+			doMergeSort(arr, beginIndex, middleIndex);
+			doMergeSort(arr, middleIndex,   endIndex);
+			// fusionne les deux parties
+			mergeArrays(arr, beginIndex, middleIndex, endIndex);
 			
-			return mergeArrays(doMergeSort(leftArr), doMergeSort(rightArr));
+			return arr;
 			
 		}
 		
@@ -34,46 +36,41 @@ public class MergeSort {
 	}
 	
 	/**
-	 * Fusionne le tableau arr1 avec le tableau arr2, en triant les éléments
-	 * @param arr1
-	 * @param arr2
+	 * Fusionne la partie gauche de arr avec la partie droite de arr dans un tableau annexe.
+	 * Copie ce tableau annexe dans arr 
+	 * @param arr
+	 * @param beginIndex
+	 * @param middleIndex
+	 * @param endIndex
 	 * @return
 	 */
-	public static int[] mergeArrays(int [] arr1, int[] arr2)
+	public static void mergeArrays(int [] arr, int beginIndex, int middleIndex, int endIndex)
 	{
-		int total = arr1.length + arr2.length;
-		int[] result = new int[total];
 		
-		int i = 0;
-		int j = 0;
+		int len = endIndex - beginIndex;
+		int[] tmp = new int[len];
 		
-		while( i < arr1.length && j < arr2.length)
+		int i = beginIndex;
+		int j = middleIndex;
+		
+		
+		for(int pos = beginIndex; pos < endIndex; pos++)
 		{
-			if (arr1[i] <= arr2[j])
+			if ( i < middleIndex && (j >= endIndex || arr[i] <= arr[j]))
 			{
-				result[i+j] = arr1[i];
+				tmp[pos - beginIndex] = arr[i];
+				
 				i++;
 			}
 			else
 			{
-				result[i+j] = arr2[j];
+				tmp[pos - beginIndex] = arr[j];
 				j++;
 			}
 		}
 		
-		while( i < arr1.length)
-		{
-			result[i+j] = arr1[i];
-			i++;
-		}
-		
-		while( j < arr2.length)
-		{
-			result[i+j] = arr2[j];
-			j++;
-		}
-		
-		return result;
+		// copie le tableau temporaire dans arr
+		System.arraycopy(tmp, 0, arr, beginIndex, len);
 	}
 	
 	/**
@@ -82,24 +79,29 @@ public class MergeSort {
 	 * @param arr
 	 * @return
 	 */
-	public static int[] doMergeSortUpgraded(int[] arr, final int CUTOFF)
+	public static int[] doMergeSortUpgraded(int[] arr, final int CUTOFF, int beginIndex, int endIndex)
 	{
-		int len = arr.length;
+		int len = endIndex - beginIndex;
 		
 		if (len <= CUTOFF)
 		{
-			return InsertionSort.doInsertionSort(arr);
+			InsertionSort.doInsertionSort(arr);
+			return arr;
 		}
 		
 		else
 		{
-			int[] leftArr = new int[len/2];
-			int[] rightArr = new int[len - len/2];
 			
-			System.arraycopy(arr, 0, leftArr, 0, len/2);
-			System.arraycopy(arr, len/2, rightArr, 0, len - len/2);
+			int middleIndex = (beginIndex + endIndex) / 2;
 			
-			return mergeArrays(doMergeSortUpgraded(leftArr, CUTOFF), doMergeSortUpgraded(rightArr, CUTOFF));
+			// fait le merge sort sur la partie gauche, puis la partie droite
+			doMergeSortUpgraded(arr, CUTOFF, beginIndex, middleIndex);
+			doMergeSortUpgraded(arr, CUTOFF, middleIndex,   endIndex);
+			
+			// fusionne les deux parties
+			mergeArrays(arr, beginIndex, middleIndex, endIndex);
+			
+			return arr;
 			
 		}
 	}
@@ -154,13 +156,13 @@ public class MergeSort {
 	
 	public static void main(String[] args) 
 	{
-		int[] a1 = {1, 12, 3, 7, 8, 2, 4, 3, 3, 5, 2};
+		int[] a1 = {1, 12, 3, 2};
 		int[] a2 = generateRandomArray(100);
 
 		printArray(a2);
-		printArray(doMergeSortUpgraded(a2, 16));
-		System.out.println(isSorted(doMergeSort(a2)));
-	
-	}
+		printArray(doMergeSortUpgraded(a2, 16, 0, a2.length));
+		printArray(a2);
+		System.out.println(isSorted(a2));
 
+	}
 }
