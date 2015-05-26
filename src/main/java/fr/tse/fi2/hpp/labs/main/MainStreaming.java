@@ -1,21 +1,18 @@
 package fr.tse.fi2.hpp.labs.main;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import projet.MostCommonRoutes;
 import fr.tse.fi2.hpp.labs.beans.DebsRecord;
 import fr.tse.fi2.hpp.labs.beans.measure.QueryProcessorMeasure;
 import fr.tse.fi2.hpp.labs.dispatcher.StreamingDispatcher;
 import fr.tse.fi2.hpp.labs.queries.AbstractQueryProcessor;
-import fr.tse.fi2.hpp.labs.queries.impl.labs4.RouteMembershipProcessor;
 
 /**
  * Main class of the program. Register your new queries here
@@ -42,8 +39,8 @@ public class MainStreaming {
 				"src/main/resources/data/1000Records.csv");
 
 		
-		// create an instance of the query RouteMembership
-		RouteMembershipProcessor queryToCheck = new RouteMembershipProcessor(measure);
+		// create an instance of the query MostCommonRoutes
+		MostCommonRoutes queryToCheck = new MostCommonRoutes(measure);
 		// Query processors
 		List<AbstractQueryProcessor> processors = new ArrayList<>();
 		// Add you query processor here
@@ -79,25 +76,7 @@ public class MainStreaming {
 		measure.setProcessedRecords(dispatch.getRecords());
 		measure.outputMeasure();
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date_pickup = null;
-		Date  date_dropoff = null;
-		try {
-			date_pickup = (Date)dateFormat.parse("2013-01-01 00:00:00");
-			date_dropoff = (Date)dateFormat.parse("2013-01-01 00:02:00");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		
-		DebsRecord test_is_in = new DebsRecord("07290D3599E7A0D62097A346EFCC1FB5", "E7750A37CAB07D0DFF0AF7E3573AC141", date_pickup.getTime(),	date_dropoff.getTime(),	(long)120, (float)0.44, (float)-73.956528, (float)40.716976, (float)-73.962440, (float)40.715008,"CSH", (float)3.50, (float)0.50, (float)0.50, (float)0.00 , (float)0.00, (float)4.50, false);
-		DebsRecord test_is_not_in  = new DebsRecord("A", "A", (long) 0, (long) 1, (long) 10, 1.0f,	1.0f, 1.0f,	1.0f, 1.0f,	"EURO", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,	false);
-		
-		System.out.println(queryToCheck.isIn(test_is_in));
-		System.out.println(queryToCheck.isIn(test_is_not_in));
-		
-
 
 	}
 
