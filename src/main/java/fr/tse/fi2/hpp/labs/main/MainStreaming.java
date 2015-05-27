@@ -36,7 +36,7 @@ public class MainStreaming {
 		QueryProcessorMeasure measure = new QueryProcessorMeasure();
 		// Init dispatcher
 		StreamingDispatcher dispatch = new StreamingDispatcher(
-				"src/main/resources/data/1000Records.csv");
+				"src/main/resources/data/test_02.csv");
 
 		
 		// create an instance of the query MostCommonRoutes
