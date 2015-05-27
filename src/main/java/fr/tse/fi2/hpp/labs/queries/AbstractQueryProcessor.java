@@ -166,7 +166,7 @@ public abstract class AbstractQueryProcessor implements Runnable {
 	 * @param x
 	 * @return
 	 */
-	private int cellX(float x) {
+	protected int cellX(float x) {
 
 		// double x=0;
 		double x_0 = -74.913585;
@@ -184,7 +184,7 @@ public abstract class AbstractQueryProcessor implements Runnable {
 	 * @param y
 	 * @return
 	 */
-	private int cellY(double y) {
+	protected int cellY(float y) {
 
 		double y_0 = 41.474937;
 		double delta_y = 0.004491556 / 2;
