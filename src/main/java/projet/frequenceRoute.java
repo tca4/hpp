@@ -3,7 +3,7 @@ package projet;
 public class frequenceRoute {
 	
 	int compteur;
-	long freshesht_element;
+	long freshest_element;
 	String route;
 	int index;
 	
@@ -18,13 +18,13 @@ public class frequenceRoute {
 	}
 
 
-	public long getFreshesht_element() {
-		return freshesht_element;
+	public long getFreshest_element() {
+		return freshest_element;
 	}
 
 
-	public void setFreshesht_element(long freshesht_element) {
-		this.freshesht_element = freshesht_element;
+	public void setFreshest_element(long freshest_element) {
+		this.freshest_element = freshest_element;
 	}
 
 
@@ -49,10 +49,10 @@ public class frequenceRoute {
 	
 
 
-	public frequenceRoute(int compteur, long freshesht_element, String route, int index) {
+	public frequenceRoute(int compteur, long freshest_element, String route, int index) {
 		super();
 		this.compteur = compteur;
-		this.freshesht_element = freshesht_element;
+		this.freshest_element = freshest_element;
 		this.route = route;
 		this.index = index;
 	}

@@ -14,7 +14,7 @@ public class comparateurFrequenceRoute implements Comparator {
 		if (diffCompteur == 0)
 		{
 			// les frequence sont identiques, trie selon la date
-			int diffDate = (int) (freq2.getFreshesht_element() - freq1.getFreshesht_element());
+			int diffDate = (int) (freq2.getFreshest_element() - freq1.getFreshest_element());
 			if (diffDate == 0)
 			{
 				return freq2.getIndex() - freq1.getIndex();

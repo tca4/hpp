@@ -15,13 +15,16 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 	final long MINUTES_FENETRES = 30 * 60 * 1000;
 	LinkedList<DebsRecord> fenetre30min;
 	HashMap<String, frequenceRoute> compteurRoute;
+	ArrayList<frequenceRoute> array10most;
 	int globalIndex;
+	
 	
 	public MostCommonRoutes(QueryProcessorMeasure measure) {
 		super(measure);
 		currentTime = 0;
 		fenetre30min = new LinkedList<DebsRecord>();
 		compteurRoute = new HashMap<String, frequenceRoute>(10000);
+		array10most = new ArrayList<frequenceRoute>();
 		globalIndex = 0;
 	}
 
@@ -30,16 +33,22 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 	protected double process(DebsRecord record) {
 		currentTime = record.getDropoff_datetime();
 		
+		// get the route of the record
+		String key = convertToRoute(record);
+		
+		if (!key.equals(""))
+		{
+
 		// ajout du debsRecord dans la fenetre
 		fenetre30min.add(record);
 		
-		// incremente la route du debsRecord dans la HashMap
-		String key = convertToRoute(record);
-		//System.out.println(key);
+		
+		
+		// incremente le nombre de passage de la route. Si elle n'a jamais ete rencontree, on la cree
 		if (compteurRoute.containsKey(key))
 		{
 			compteurRoute.get(key).incrementeCompteur();
-			compteurRoute.get(key).setFreshesht_element(record.getDropoff_datetime());
+			compteurRoute.get(key).setFreshest_element(record.getDropoff_datetime());
 		}
 		else
 		{
@@ -48,16 +57,27 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		}
 		
 		// supprime les debsrecord qui ne sont plus dans la fenetre des 30 min, ainsi que
-		// les routes associees dans la Hashmap
+		// les routes associees dans la Hashmap, ainsi que la route si elle est dans le tableau de 10 routes les plus frequentes
 		deleteOutsideWindow(currentTime - MINUTES_FENETRES);
 		
-		// ordonne les routes de la HashMap et affiche les 10 premieres
+		
+		// ajoute la route actuellement traitee dans le tableau des 10 plus frequentes si 
+		// elle est meilleure que celle en derniere position ou que le tableau a moins de 10 cases
+		if (array10most.size() < 10 || compteurRoute.get(key).getCompteur() >= array10most.get(array10most.size() -1).getCompteur())
+		{
+			array10most.add(compteurRoute.get(key));
+		}
+			
+			
+		// ordonne les 10 routes les plus frequentes et les affiche
 		System.out.println("---------------");
-		sortHashMap();
+		sortRoutes();
 		
-		
-//		System.out.println(fenetre30min.getFirst().getDropoff_datetime() - currentTime);
+		// incremente le nombre de routes que l'on a traitee
 		globalIndex += 1;
+		System.out.println(globalIndex);
+		}
+		
 		return 0;
 	}
 	
@@ -72,19 +92,23 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		
 		while (true)
 		{
+			// on supprime le premier element de la liste tant qu'il est en dehors de la fenetre
+			// les elements sont classes par temps arrive croissant
 			if (fenetre30min.getFirst().getDropoff_datetime() < time)
 			{
-				// decrementer le compteur de la route dans la hashmap
+				System.out.print("all is ok : ");
+				// decremente le compteur de la route dans la hashmap
 				String key = convertToRoute(fenetre30min.getFirst());
 				if  (compteurRoute.get(key).getCompteur() >= 1)
 				{
 					compteurRoute.get(key).decrementeCompteur();
+					decrementeOccurenceRoute(key);
 				}
 				else
 				{
-					compteurRoute.remove(key);
+					//compteurRoute.remove(key);
 				}
-				
+				System.out.println(fenetre30min.size());
 				fenetre30min.removeFirst();
 			}
 			else 
@@ -94,13 +118,32 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		}
 	}
 	
+	/**
+	 * Decremente l'occurence de la route en paramètre seulement si elle se trouve
+	 * dans le tableau des 10 routes les plus frequentes. Cette route ne peut se 
+	 * trouver qu'une seule fois dans le tableau, c'est pourquoi la fonction termine 
+	 * lorsque l'on a decrementé.
+	 * @param route
+	 */
+	void decrementeOccurenceRoute(String route)
+	{
+		for(frequenceRoute elem : array10most)
+		{
+			if (elem.getRoute().equals(route))
+			{
+				elem.decrementeCompteur();
+				return;
+			}
+		}
+	}
 	
 	/**
 	 * Retourne la case a laquelle appartient la coordonnee (latitude,longitude).
+	 * Renvoie "" si la case n'est pas dans la grille
 	 * @param latitude
 	 * @param longitude
 	 * @return La case sous la forme d'un entier. Les coordonnees de la case sont comprises entre
-	 * 1 et 300. On retourne (cellX * 1000 + cellY)
+	 * 1 et 300. On retourne (cellX.cellY)
 	 */
 	private String convertToCell(float latitude, float longitude)
 	{
@@ -121,6 +164,12 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		// on ne garde que la partie entiere du nombre de cases
 		Integer X = (int) (Math.round(cellX) + 1);
 		Integer Y = (int) (Math.round(cellY) + 1);
+		
+		if (X < 1 || X > 300 || Y < 1 || Y > 300)
+		{
+			return "";
+		}
+		
 		String result = X.toString() + "." + Y.toString();
 		return result;
 		
@@ -128,31 +177,44 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 	
 	
 	/**
-	 * Renvoie la route du debsRecord sous forme de String
+	 * Renvoie la route du debsRecord sous forme de String. On retourne (caseDeDepart;caseDArrivee)
+	 * Renvoie "" si une des cases depasse de la grille
 	 * @param record
 	 * @return
 	 */
 	private String convertToRoute(DebsRecord record)
 	{
-		String route = convertToCell(record.getPickup_latitude(),  record.getPickup_longitude()).toString() + ";" 
-				+ convertToCell(record.getDropoff_latitude(),  record.getDropoff_longitude()).toString();
-		return route;
-	}
-	
-	private void sortHashMap()
-	{
-		ArrayList<frequenceRoute> tableau = new ArrayList<frequenceRoute>();
+		String caseDepart  = convertToCell(record.getPickup_latitude(),  record.getPickup_longitude());
+		String caseArrivee = convertToCell(record.getDropoff_latitude(), record.getDropoff_longitude());
 		
-		for(String route : compteurRoute.keySet())
+		if (caseDepart.equals("") || caseArrivee.equals(""))
 		{
-			tableau.add(compteurRoute.get(route));
+			return "";
 		}
 		
-		Collections.sort(tableau, new comparateurFrequenceRoute());
+		return caseDepart + ";" + caseArrivee;
+	}
+	
+	
+	/**
+	 * Trie les routes pour avoir les 10 routes les plus frequentes.
+	 */
+	private void sortRoutes()
+	{
+		// trie les elements
+		Collections.sort(array10most, new comparateurFrequenceRoute());
 		
-		for(frequenceRoute elem : tableau)
+		
+		// supprime le dernier si la taille est sup a 10.
+		if (array10most.size() > 10)
 		{
-			System.out.println(elem.getRoute() + " " + elem.getCompteur() + " " + elem.getFreshesht_element() + " " + elem.getIndex());
+			array10most.remove(array10most.size() -1);
+		}
+		
+		
+		for(int i = 0; i < Math.min(10, array10most.size()); ++i)
+		{
+			System.out.println(array10most.get(i).getRoute() + " " + array10most.get(i).getCompteur() + " " + array10most.get(i).getFreshest_element() + " " + array10most.get(i).getIndex());
 		}
 	}
 
