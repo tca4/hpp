@@ -41,8 +41,8 @@ public class MainStreaming {
 
 		long start = System.nanoTime();
 		// create an instance of the query MostProfitableAreas
-//		MostProfitableAreas queryToCheck = new MostProfitableAreas(measure);
-		MostCommonRoutes queryToCheck = new MostCommonRoutes(measure);
+		MostProfitableAreas queryToCheck = new MostProfitableAreas(measure);
+//		MostCommonRoutes queryToCheck = new MostCommonRoutes(measure);
 		// Query processors
 		List<AbstractQueryProcessor> processors = new ArrayList<>();
 		// Add you query processor here
