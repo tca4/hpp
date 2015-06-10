@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import projet.MostCommonRoutes;
+import projet.MostProfitableAreas;
 import fr.tse.fi2.hpp.labs.beans.DebsRecord;
 import fr.tse.fi2.hpp.labs.beans.measure.QueryProcessorMeasure;
 import fr.tse.fi2.hpp.labs.dispatcher.StreamingDispatcher;
@@ -39,7 +40,8 @@ public class MainStreaming {
 				"src/main/resources/data/test_02.csv");
 
 		
-		// create an instance of the query MostCommonRoutes
+		// create an instance of the query MostProfitableAreas
+//		MostProfitableAreas queryToCheck = new MostProfitableAreas(measure);
 		MostCommonRoutes queryToCheck = new MostCommonRoutes(measure);
 		// Query processors
 		List<AbstractQueryProcessor> processors = new ArrayList<>();

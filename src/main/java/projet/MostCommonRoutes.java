@@ -1,7 +1,9 @@
 package projet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -42,7 +44,7 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		// ajout du debsRecord dans la fenetre
 		fenetre30min.add(record);
 		
-		
+		System.out.println(formateDate(record.getDropoff_datetime()));
 		
 		// incremente le nombre de passage de la route. Si elle n'a jamais ete rencontree, on la cree
 		if (compteurRoute.containsKey(key))
@@ -96,7 +98,6 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 			// les elements sont classes par temps arrive croissant
 			if (fenetre30min.getFirst().getDropoff_datetime() < time)
 			{
-				System.out.print("all is ok : ");
 				// decremente le compteur de la route dans la hashmap
 				String key = convertToRoute(fenetre30min.getFirst());
 				if  (compteurRoute.get(key).getCompteur() >= 1)
@@ -104,11 +105,7 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 					compteurRoute.get(key).decrementeCompteur();
 					decrementeOccurenceRoute(key);
 				}
-				else
-				{
-					//compteurRoute.remove(key);
-				}
-				System.out.println(fenetre30min.size());
+				
 				fenetre30min.removeFirst();
 			}
 			else 
@@ -216,6 +213,14 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		{
 			System.out.println(array10most.get(i).getRoute() + " " + array10most.get(i).getCompteur() + " " + array10most.get(i).getFreshest_element() + " " + array10most.get(i).getIndex());
 		}
+	}
+	
+	private String formateDate(long time)
+	{
+		Date date = new Date(time);
+        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String res = df2.format(date);
+		return res;
 	}
 
 	
