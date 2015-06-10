@@ -25,7 +25,7 @@ public class MostProfitableAreas extends AbstractQueryProcessor
 	}
 
 	@Override
-	protected double process(DebsRecord record) {
+	protected String process(DebsRecord record) {
 		currentTime = record.getDropoff_datetime();
 		
 		// informations concernant le trajet
@@ -36,7 +36,7 @@ public class MostProfitableAreas extends AbstractQueryProcessor
 		// si la case n'est pas dans la grille, aucun calcul n'est effectue
 		if (caseDepart.equals(""))
 		{
-			return 0;
+			return "";
 		}
 		
 		
@@ -73,7 +73,7 @@ public class MostProfitableAreas extends AbstractQueryProcessor
 		}
 		
 		System.out.println("-------------");
-		return 0;
+		return "";
 	}
 	
 	

@@ -17,7 +17,7 @@ public class NaiveAverage extends AbstractQueryProcessor {
 	}
 
 	@Override
-	protected double process(DebsRecord record) {
+	protected String process(DebsRecord record) {
 		numbers.add(record.getFare_amount());
 
 		float sum = 0f;
@@ -25,7 +25,7 @@ public class NaiveAverage extends AbstractQueryProcessor {
 			sum += f;
 		}
 		writeLine("current mean : " + (sum / numbers.size()));
-		return (double)sum;
+		return String.valueOf(sum);
 		
 	}
 

@@ -99,8 +99,8 @@ public abstract class AbstractQueryProcessor implements Runnable {
 					writeEvents.put("noWriting");
 					break;
 				} else {
-					Double result = process(record);
-					writeLine(result.toString());
+					String result = process(record);
+					writeLine(result);
 				}
 			} catch (InterruptedException e) {
 				logger.error(
@@ -130,7 +130,7 @@ public abstract class AbstractQueryProcessor implements Runnable {
 	 * @param record
 	 *            record to be processed
 	 */
-	protected abstract double process(DebsRecord record);
+	protected abstract String process(DebsRecord record);
 
 	/**
 	 * 
@@ -207,10 +207,15 @@ public abstract class AbstractQueryProcessor implements Runnable {
 	 *            the line to write as an answer
 	 */
 	protected void writeLine(String line) {
-		try {
-			writeEvents.put(line);
-		} catch (InterruptedException e) {
+		if (!line.equals(""))
+		{
+			try 
+			{
+					writeEvents.put(line);
+			} 
+			catch (InterruptedException e) {
 			e.printStackTrace();
+			}
 		}
 	}
 

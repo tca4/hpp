@@ -37,9 +37,9 @@ public class MainStreaming {
 		QueryProcessorMeasure measure = new QueryProcessorMeasure();
 		// Init dispatcher
 		StreamingDispatcher dispatch = new StreamingDispatcher(
-				"src/main/resources/data/sorted_data.csv");
+				"src/main/resources/data/test_02.csv");
 
-		
+		long start = System.nanoTime();
 		// create an instance of the query MostProfitableAreas
 //		MostProfitableAreas queryToCheck = new MostProfitableAreas(measure);
 		MostCommonRoutes queryToCheck = new MostCommonRoutes(measure);
@@ -77,6 +77,9 @@ public class MainStreaming {
 		// Output measure and ratio per query processor
 		measure.setProcessedRecords(dispatch.getRecords());
 		measure.outputMeasure();
+		
+		long elapsedMilliSecondes = (System.nanoTime() - start) / 1_000_000;
+		System.out.println(elapsedMilliSecondes / 1000 + "." + elapsedMilliSecondes % 1000 + " seconds elapsed.");
 		
 		
 

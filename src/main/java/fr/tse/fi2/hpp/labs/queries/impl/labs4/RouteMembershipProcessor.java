@@ -17,11 +17,11 @@ public class RouteMembershipProcessor extends AbstractQueryProcessor {
 	}
 
 	@Override
-	protected double process(DebsRecord record) {
+	protected String process(DebsRecord record) {
 		
 		filtre.add(record);
 //		System.out.println(record.getHack_license() + " -> Done");
-		return 0;
+		return "";
 	}
 	
 	public boolean isIn(DebsRecord recordToCheck)

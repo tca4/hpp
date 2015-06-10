@@ -36,7 +36,7 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 
 	
 	@Override
-	protected double process(DebsRecord record) {
+	protected String process(DebsRecord record) {
 		currentTime = record.getDropoff_datetime();
 		delayStart = System.nanoTime();
 		
@@ -76,16 +76,18 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 			
 			
 		// ordonne les 10 routes les plus frequentes et les affiche si il y eu un changement
-		System.out.println("---------------");
-		sortRoutes(record);
+//		System.out.println("---------------");
+		String result = sortRoutes(record);
 		
 		// incremente le nombre de routes que l'on a traitee
 		globalIndex += 1;
-		System.out.println(globalIndex);
+//		System.out.println(globalIndex);
+		
+		return result;
 		
 		}
 		
-		return 0;
+		return "";
 	}
 	
 	
@@ -201,7 +203,7 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 	/**
 	 * Trie les routes pour avoir les 10 routes les plus frequentes. Affiche les changements s'il y en a
 	 */
-	private void sortRoutes(DebsRecord record)
+	private String sortRoutes(DebsRecord record)
 	{
 		// trie les elements
 		Collections.sort(array10most, new comparateurFrequenceRoute());
@@ -229,10 +231,16 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		{
 			classement = tmp;
 			String delay = String.valueOf(System.nanoTime() - delayStart);
-			System.out.println(formateDate(record.getPickup_datetime()) +"," 
-						     + formateDate(record.getDropoff_datetime()) + "," 
-					         + classement + delay);
+			String result = formateDate(record.getPickup_datetime()) +"," 
+				     + formateDate(record.getDropoff_datetime()) + "," 
+			         + classement + delay;
+//			System.out.println(result);
+			return result;
 		}
+		
+		return "";
+		
+		
 	}
 	
 	private String formateDate(long time)

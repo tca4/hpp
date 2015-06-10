@@ -17,11 +17,11 @@ public class IncrementalAverage extends AbstractQueryProcessor {
 	}
 
 	@Override
-	protected double process(DebsRecord record) {
+	protected String process(DebsRecord record) {
 		nb++;
 		sum += record.getFare_amount();
 		
-		return(sum/nb);
+		return(String.valueOf(sum/nb));
 		//writeLine("current mean : " + (sum / nb));
 	}
 
