@@ -37,7 +37,7 @@ public class MainStreaming {
 		QueryProcessorMeasure measure = new QueryProcessorMeasure();
 		// Init dispatcher
 		StreamingDispatcher dispatch = new StreamingDispatcher(
-				"src/main/resources/data/test_02.csv");
+				"src/main/resources/data/sorted_data.csv");
 
 		
 		// create an instance of the query MostProfitableAreas

@@ -19,6 +19,8 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 	HashMap<String, frequenceRoute> compteurRoute;
 	ArrayList<frequenceRoute> array10most;
 	int globalIndex;
+	String classement;
+	long delayStart;
 	
 	
 	public MostCommonRoutes(QueryProcessorMeasure measure) {
@@ -28,12 +30,15 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		compteurRoute = new HashMap<String, frequenceRoute>(10000);
 		array10most = new ArrayList<frequenceRoute>();
 		globalIndex = 0;
+		classement = "";
+		delayStart = 0;
 	}
 
 	
 	@Override
 	protected double process(DebsRecord record) {
 		currentTime = record.getDropoff_datetime();
+		delayStart = System.nanoTime();
 		
 		// get the route of the record
 		String key = convertToRoute(record);
@@ -44,7 +49,6 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		// ajout du debsRecord dans la fenetre
 		fenetre30min.add(record);
 		
-		System.out.println(formateDate(record.getDropoff_datetime()));
 		
 		// incremente le nombre de passage de la route. Si elle n'a jamais ete rencontree, on la cree
 		if (compteurRoute.containsKey(key))
@@ -71,13 +75,14 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 		}
 			
 			
-		// ordonne les 10 routes les plus frequentes et les affiche
+		// ordonne les 10 routes les plus frequentes et les affiche si il y eu un changement
 		System.out.println("---------------");
-		sortRoutes();
+		sortRoutes(record);
 		
 		// incremente le nombre de routes que l'on a traitee
 		globalIndex += 1;
 		System.out.println(globalIndex);
+		
 		}
 		
 		return 0;
@@ -189,14 +194,14 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 			return "";
 		}
 		
-		return caseDepart + ";" + caseArrivee;
+		return caseDepart + "," + caseArrivee + ",";
 	}
 	
 	
 	/**
-	 * Trie les routes pour avoir les 10 routes les plus frequentes.
+	 * Trie les routes pour avoir les 10 routes les plus frequentes. Affiche les changements s'il y en a
 	 */
-	private void sortRoutes()
+	private void sortRoutes(DebsRecord record)
 	{
 		// trie les elements
 		Collections.sort(array10most, new comparateurFrequenceRoute());
@@ -208,17 +213,32 @@ public class MostCommonRoutes extends AbstractQueryProcessor {
 			array10most.remove(array10most.size() -1);
 		}
 		
-		
+		// verifie s'il y a eu un changement
+		String tmp = "";
 		for(int i = 0; i < Math.min(10, array10most.size()); ++i)
 		{
-			System.out.println(array10most.get(i).getRoute() + " " + array10most.get(i).getCompteur() + " " + array10most.get(i).getFreshest_element() + " " + array10most.get(i).getIndex());
+			tmp += array10most.get(i).getRoute();
+		}
+		
+		for(int i = Math.min(10, array10most.size()); i < 10; ++i)
+		{
+			tmp += "NULL,";
+		}
+		
+		if (!tmp.equals(classement))
+		{
+			classement = tmp;
+			String delay = String.valueOf(System.nanoTime() - delayStart);
+			System.out.println(formateDate(record.getPickup_datetime()) +"," 
+						     + formateDate(record.getDropoff_datetime()) + "," 
+					         + classement + delay);
 		}
 	}
 	
 	private String formateDate(long time)
 	{
 		Date date = new Date(time);
-        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String res = df2.format(date);
 		return res;
 	}
