@@ -19,13 +19,47 @@ public class Profitability
 	ListeMediane earnings;
 	ArrayList<Pair<String, Long>> allEmptyTaxis;
 	long freshestElement;
+	int index;
+	String cell;
 	
 	
 	
-	public Profitability()
+	public Profitability(int index, long freshestElement, String cell)
 	{
 		earnings = new ListeMediane();
 		allEmptyTaxis = new ArrayList<Pair<String, Long>>();
+		this.index = index;
+		this.freshestElement = freshestElement;
+		this.cell = cell;
+	}
+	
+	
+	public void setFreshestElement(long freshestElement)
+	{
+		this.freshestElement = freshestElement;
+	}
+	
+	
+	public long getFreshestElement()
+	{
+		return this.freshestElement;
+	}
+	
+	
+	public int getIndex()
+	{
+		return this.index;
+	}
+	
+	public String getCell()
+	{
+		return this.cell;
+	}
+	
+	
+	public int getNbEmptyTaxis()
+	{
+		return allEmptyTaxis.size();
 	}
 	
 	
@@ -72,7 +106,7 @@ public class Profitability
 				}
 				i++;
 			}
-			System.out.println("i : " + i + "\tSize :" + allEmptyTaxis.size());
+//			System.out.println("i : " + i + "\tSize :" + allEmptyTaxis.size());
 			allEmptyTaxis.remove(i);
 				
 		}
