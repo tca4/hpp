@@ -44,6 +44,7 @@ public class MostProfitableAreas extends AbstractQueryProcessor
 	@Override
 	protected String process(DebsRecord record) {
 		currentTime = record.getDropoff_datetime();
+		delayStart = System.nanoTime();
 		
 		// informations concernant le trajet
 		String caseDepart   = convertToCell(record.getPickup_latitude(), record.getPickup_longitude());
@@ -101,7 +102,7 @@ public class MostProfitableAreas extends AbstractQueryProcessor
 		if (lastPositionOfTaxi.containsKey(medaillon))
 		{
 			// le nombre de taxi a diminue, le profit de cette case peut augmenter 
-			// et changer sa position dans le tableau des 10 meilleurs area
+			// et changer sa position dans le tableau des 10 meilleures area
 			String dernierePosition = lastPositionOfTaxi.get(medaillon);
 			array10most.remove(profitArea.get(dernierePosition));
 			
